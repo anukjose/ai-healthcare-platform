@@ -1,0 +1,93 @@
+{
+    "patient_id": "P001",
+  
+    "patient": {
+      "name": "Mustermann",
+      "sex": "M"
+    },
+  
+    "labs": [
+      {"test": "Hemoglobin", "date": "2019-06-01", "value": 10.6, "unit": "g/dL"},
+      {"test": "Hemoglobin", "date": "2023-04-04", "value": 11.3, "unit": "g/dL"},
+      {"test": "Hemoglobin", "date": "2024-04-10", "value": 10.9, "unit": "g/dL"},
+      {"test": "Hemoglobin", "date": "2024-12-05", "value": 11.6, "unit": "g/dL"},
+      {"test": "Hemoglobin", "date": "2025-02-08", "value": 11.1, "unit": "g/dL"},
+      {"test": "Hemoglobin", "date": "2025-09-24", "value": 11.3, "unit": "g/dL"},
+  
+      {"test": "WBC", "date": "2024-04-10", "value": 6200, "unit": "cells/cumm"},
+      {"test": "WBC", "date": "2024-12-05", "value": 5300, "unit": "cells/cumm"},
+      {"test": "WBC", "date": "2025-09-24", "value": 7400, "unit": "cells/cumm"},
+  
+      {"test": "Platelet", "date": "2024-04-10", "value": 290000, "unit": "cells/cumm"},
+      {"test": "Platelet", "date": "2024-12-05", "value": 250000, "unit": "cells/cumm"},
+      {"test": "Platelet", "date": "2025-09-24", "value": 300000, "unit": "cells/cumm"},
+  
+      {"test": "Creatinine", "date": "2024-04-10", "value": 0.8, "unit": "mg/dL"},
+      {"test": "Creatinine", "date": "2024-12-05", "value": 0.7, "unit": "mg/dL"},
+      {"test": "Creatinine", "date": "2025-09-24", "value": 0.8, "unit": "mg/dL"},
+  
+      {"test": "CRP", "date": "2024-04-10", "value": 6.5, "unit": "mg/L"},
+      {"test": "CRP", "date": "2025-02-08", "value": 1.67, "unit": "mg/L"},
+      {"test": "CRP", "date": "2025-05-19", "value": 10.07, "unit": "mg/L"},
+      {"test": "CRP", "date": "2025-09-24", "value": 3.64, "unit": "mg/L"},
+  
+      {"test": "ESR", "date": "2024-04-10", "value": 53, "unit": "mm/hr"},
+      {"test": "ESR", "date": "2024-12-05", "value": 18, "unit": "mm/hr"},
+      {"test": "ESR", "date": "2025-05-19", "value": 64, "unit": "mm/hr"},
+      {"test": "ESR", "date": "2025-09-24", "value": 30, "unit": "mm/hr"},
+  
+      {"test": "Cholesterol Total", "date": "2024-04-10", "value": 156, "unit": "mg/dL"},
+      {"test": "Cholesterol Total", "date": "2024-12-05", "value": 160, "unit": "mg/dL"},
+      {"test": "Cholesterol Total", "date": "2025-09-24", "value": 191, "unit": "mg/dL"},
+  
+      {"test": "Fasting Blood Sugar", "date": "2024-04-10", "value": 92, "unit": "mg/dL"},
+      {"test": "Fasting Blood Sugar", "date": "2024-12-05", "value": 91, "unit": "mg/dL"},
+      {"test": "Fasting Blood Sugar", "date": "2025-07-05", "value": 85, "unit": "mg/dL"}
+    ],
+  
+    "diagnoses": [
+      {
+        "date": "2023-02-21",
+        "condition": "Rheumatoid arthritis",
+        "status": "active",
+        "notes": "Previously high disease activity, currently controlled"
+      }
+    ],
+  
+    "medications": [
+      {
+        "date": "2023-02-21",
+        "name": "Methotrexate",
+        "dose": "weekly"
+      },
+      {
+        "date": "2023-02-21",
+        "name": "Tofacitinib",
+        "dose": "5 mg daily"
+      }
+    ],
+  
+    "visits": [
+      {
+        "date": "2023-02-21",
+        "provider": "Rheumatology",
+        "summary": "Stable condition, no joint swelling"
+      },
+      {
+        "date": "2025-09-24",
+        "provider": "General Checkup",
+        "summary": "Routine lab monitoring"
+      }
+    ],
+  
+    "notes": [
+      {
+        "date": "2023-02-21",
+        "content": "Patient tolerating medication well"
+      },
+      {
+        "date": "2025-09-24",
+        "content": "Inflammation markers fluctuating over time"
+      }
+    ]
+  }

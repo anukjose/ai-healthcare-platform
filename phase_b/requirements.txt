@@ -1,0 +1,13 @@
+certifi==2026.4.22
+cffi==2.0.0
+pycparser==3.0
+rpds-py==0.30.0
+wheel==0.47.0
+fastapi
+uvicorn
+pandas
+openai
+python-multipart
+numpy
+psycopg2-binary
+python-dotenv
