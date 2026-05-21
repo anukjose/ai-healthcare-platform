@@ -7,9 +7,47 @@ export default function App() {
   const [messages, setMessages] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
 
-  // -----------------------------------
+
+  // ---------------------------------------------------
+  // KUBERNETES BACKEND API
+  // ---------------------------------------------------
+  // Backend exposed through Kubernetes NodePort Service
+  //
+  // phaseb-api-service
+  // exposed externally via:
+  //
+  // http://localhost:30080
+  // ---------------------------------------------------
+
+  const API_URL = "http://localhost:30080/ask";
+
+
+  // ---------------------------------------------------
+  // PREVIOUS DOCKER COMPOSE CONFIG
+  // ---------------------------------------------------
+  /*
+  Docker Compose backend exposure:
+
+  const API_URL = "http://127.0.0.1:8002/ask";
+
+  because backend container was exposed using:
+  docker-compose port mapping.
+  */
+
+
+  // ---------------------------------------------------
+  // PREVIOUS LOCAL FASTAPI CONFIG
+  // ---------------------------------------------------
+  /*
+  Local laptop FastAPI backend:
+
+  const API_URL = "http://127.0.0.1:8000/ask";
+  */
+
+
+  // ---------------------------------------------------
   // LOGIN
-  // -----------------------------------
+  // ---------------------------------------------------
 
   const handleLogin = () => {
 
@@ -18,9 +56,10 @@ export default function App() {
     setLoggedIn(true);
   };
 
-  // -----------------------------------
+
+  // ---------------------------------------------------
   // SEND QUESTION
-  // -----------------------------------
+  // ---------------------------------------------------
 
   const sendQuestion = async () => {
 
@@ -36,7 +75,7 @@ export default function App() {
     try {
 
       const response = await fetch(
-        "http://127.0.0.1:8002/ask", //before it was 8000 changed as we have oen docker one local
+        API_URL,
         {
           method: "POST",
 
@@ -55,6 +94,7 @@ export default function App() {
 
       const aiMessage = {
         role: "assistant",
+
         content:
           typeof data.answer === "string"
             ? data.answer
@@ -75,9 +115,10 @@ export default function App() {
     setQuestion("");
   };
 
-  // -----------------------------------
+
+  // ---------------------------------------------------
   // LOGIN SCREEN
-  // -----------------------------------
+  // ---------------------------------------------------
 
   if (!loggedIn) {
 
@@ -116,9 +157,10 @@ export default function App() {
     );
   }
 
-  // -----------------------------------
+
+  // ---------------------------------------------------
   // CHAT SCREEN
-  // -----------------------------------
+  // ---------------------------------------------------
 
   return (
 
@@ -131,6 +173,7 @@ export default function App() {
         <div className="bg-blue-600 text-white px-6 py-5 flex justify-between items-center">
 
           <div>
+
             <h1 className="text-2xl font-bold">
               Healthcare AI Assistant
             </h1>
@@ -138,6 +181,7 @@ export default function App() {
             <p className="text-sm opacity-80 mt-1">
               SQL • Vector • Hybrid Retrieval
             </p>
+
           </div>
 
           <div className="bg-white/20 px-4 py-2 rounded-2xl text-sm font-medium">
@@ -145,6 +189,7 @@ export default function App() {
           </div>
 
         </div>
+
 
         {/* CHAT WINDOW */}
 
@@ -164,6 +209,7 @@ export default function App() {
 
             </div>
           )}
+
 
           {messages.map((msg, index) => (
 
@@ -201,6 +247,7 @@ export default function App() {
           ))}
 
         </div>
+
 
         {/* INPUT */}
 

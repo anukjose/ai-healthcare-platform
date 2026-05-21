@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+
+kind: Job
+
+metadata:
+  name: phasea-worker
+
+spec:
+
+  template:
+
+    spec:
+
+      containers:
+        - name: phasea-worker
+
+          image: phasea-worker
+
+          imagePullPolicy: Never
+
+          env:
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openai-secret
+                  key: OPENAI_API_KEY
+
+          volumeMounts:
+            - name: patient-data
+              mountPath: /data
+
+      restartPolicy: Never
+
+      volumes:
+        - name: patient-data
+          hostPath:
+            path: /Users/anusmacbook/Documents/AI_MINI_Project_HeathCare/demo_project/data

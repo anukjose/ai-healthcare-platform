@@ -1,39 +1,77 @@
 import psycopg2
 
 
-# -----------------------------------
-# DB CONNECTION
-# -----------------------------------
+# ---------------------------------------------------
+# KUBERNETES DATABASE CONNECTION
+# ---------------------------------------------------
+# Kubernetes services communicate internally
+# using Service names.
+#
+# postgres-service
+# is the Kubernetes Service hostname.
+# ---------------------------------------------------
+
+DB_CONFIG = {
+    "dbname": "healthcare_demo",
+    "user": "postgres",
+    "password": "postgres",
+    "host": "postgres-service",
+    "port": "5432"
+}
+
+
+# ---------------------------------------------------
+# GET DATABASE CONNECTION
+# ---------------------------------------------------
 
 def get_connection():
 
-    conn = psycopg2.connect(
-        dbname="healthcare_demo",
-        user="postgres",
-        password="postgres",
-        host="postgres-db",
-        port="5432"
-    )
+    conn = psycopg2.connect(**DB_CONFIG)
 
     return conn
 
-    ''' change to above for docker 
-    def get_connection():
 
-    conn = psycopg2.connect(
-        dbname="healthcare_demo",
-        user="anusmacbook",
-        host="localhost",
-        port="5432"
-    )
+# ---------------------------------------------------
+# PREVIOUS DOCKER COMPOSE CONFIG
+# ---------------------------------------------------
+'''
+Docker Compose networking used:
 
-    return conn
+host="postgres-db"
+
+because services communicated through
+Docker Compose internal network.
+
+Example:
+
+conn = psycopg2.connect(
+    dbname="healthcare_demo",
+    user="postgres",
+    password="postgres",
+    host="postgres-db",
+    port="5432"
+)
 '''
 
 
-# -----------------------------------
+# ---------------------------------------------------
+# PREVIOUS LOCAL LAPTOP CONFIG
+# ---------------------------------------------------
+'''
+Local Mac PostgreSQL connection:
+
+conn = psycopg2.connect(
+    dbname="healthcare_demo",
+    user="anusmacbook",
+    host="localhost",
+    port="5432"
+)
+'''
+
+
+# ---------------------------------------------------
 # GET LATEST TEST VALUE
-# -----------------------------------
+# ---------------------------------------------------
 
 def get_latest_test(patient_id, test_name):
 
@@ -58,6 +96,7 @@ def get_latest_test(patient_id, test_name):
     result = cur.fetchone()
 
     cur.close()
+
     conn.close()
 
     if result:
@@ -71,9 +110,9 @@ def get_latest_test(patient_id, test_name):
     return None
 
 
-# -----------------------------------
+# ---------------------------------------------------
 # GET FULL HISTORY
-# -----------------------------------
+# ---------------------------------------------------
 
 def get_test_history(patient_id, test_name):
 
@@ -100,6 +139,7 @@ def get_test_history(patient_id, test_name):
     rows = cur.fetchall()
 
     cur.close()
+
     conn.close()
 
     history = []
@@ -115,9 +155,9 @@ def get_test_history(patient_id, test_name):
     return history
 
 
-# -----------------------------------
+# ---------------------------------------------------
 # TEST
-# -----------------------------------
+# ---------------------------------------------------
 
 if __name__ == "__main__":
 
@@ -127,6 +167,7 @@ if __name__ == "__main__":
     )
 
     print("\n--- LATEST ---")
+
     print(latest)
 
     history = get_test_history(
@@ -137,4 +178,5 @@ if __name__ == "__main__":
     print("\n--- HISTORY ---")
 
     for h in history:
+
         print(h)

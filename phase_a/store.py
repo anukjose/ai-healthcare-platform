@@ -1,22 +1,37 @@
 import psycopg2
 import time
 
-# -----------------------------
-# DB CONNECTION
-# -----------------------------
+
+# ---------------------------------------------------
+# KUBERNETES DATABASE CONNECTION
+# ---------------------------------------------------
+# Kubernetes services communicate internally
+# using Service names.
+#
+# postgres-service
+# is the Kubernetes Service hostname.
+# ---------------------------------------------------
+
+DB_CONFIG = {
+    "dbname": "healthcare_demo",
+    "user": "postgres",
+    "password": "postgres",
+    "host": "postgres-service",
+    "port": "5432"
+}
+
+
+# ---------------------------------------------------
+# WAIT FOR DATABASE
+# ---------------------------------------------------
+
 def wait_for_db():
 
     while True:
 
         try:
 
-            conn = psycopg2.connect(
-                dbname="healthcare_demo",
-                user="postgres",
-                password="postgres",
-                host="postgres-db",
-                port="5432"
-            )
+            conn = psycopg2.connect(**DB_CONFIG)
 
             conn.close()
 
@@ -30,39 +45,66 @@ def wait_for_db():
 
             time.sleep(5)
 
+
+# ---------------------------------------------------
+# GET CONNECTION
+# ---------------------------------------------------
+
 def get_connection():
+
     wait_for_db()
 
-    conn = psycopg2.connect(
-        dbname="healthcare_demo",
-        user="postgres",
-        password="postgres",
-        host="postgres-db",
-        port="5432"
-    )
+    conn = psycopg2.connect(**DB_CONFIG)
 
     return conn
 
-    ''' change to above for docker 
-    def get_connection():
 
-    conn = psycopg2.connect(
-        dbname="healthcare_demo",
-        user="anusmacbook",
-        host="localhost",
-        port="5432"
-    )
+# ---------------------------------------------------
+# PREVIOUS DOCKER COMPOSE CONFIG
+# ---------------------------------------------------
+'''
+Docker Compose networking used:
 
-    return conn
+host="postgres-db"
+
+because services communicated through
+Docker Compose internal network.
+
+Example:
+
+conn = psycopg2.connect(
+    dbname="healthcare_demo",
+    user="postgres",
+    password="postgres",
+    host="postgres-db",
+    port="5432"
+)
 '''
 
 
-# -----------------------------
+# ---------------------------------------------------
+# PREVIOUS LOCAL LAPTOP CONFIG
+# ---------------------------------------------------
+'''
+Local Mac PostgreSQL connection:
+
+conn = psycopg2.connect(
+    dbname="healthcare_demo",
+    user="anusmacbook",
+    host="localhost",
+    port="5432"
+)
+'''
+
+
+# ---------------------------------------------------
 # STORE FACTS
-# -----------------------------
+# ---------------------------------------------------
+
 def store_facts(facts):
 
     conn = get_connection()
+
     cur = conn.cursor()
 
     for fact in facts:
@@ -70,6 +112,7 @@ def store_facts(facts):
         cur.execute("""
             INSERT INTO patient_lab_history
             (patient_id, test, date, value, unit)
+
             VALUES (%s, %s, %s, %s, %s)
 
             ON CONFLICT (patient_id, test, date)
@@ -85,17 +128,20 @@ def store_facts(facts):
     conn.commit()
 
     cur.close()
+
     conn.close()
 
     print(f"✅ Stored {len(facts)} facts")
 
 
-# -----------------------------
+# ---------------------------------------------------
 # STORE SUMMARIES
-# -----------------------------
+# ---------------------------------------------------
+
 def store_summaries(summaries):
 
     conn = get_connection()
+
     cur = conn.cursor()
 
     for summary in summaries:
@@ -132,17 +178,20 @@ def store_summaries(summaries):
     conn.commit()
 
     cur.close()
+
     conn.close()
 
     print(f"✅ Stored {len(summaries)} summaries")
 
 
-# -----------------------------
+# ---------------------------------------------------
 # STORE EMBEDDED CHUNKS
-# -----------------------------
+# ---------------------------------------------------
+
 def store_chunks(chunks):
 
     conn = get_connection()
+
     cur = conn.cursor()
 
     for chunk in chunks:
@@ -167,6 +216,7 @@ def store_chunks(chunks):
     conn.commit()
 
     cur.close()
+
     conn.close()
 
     print(f"✅ Stored {len(chunks)} embedded chunks")

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: phaseb-api
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: phaseb-api
+
+  template:
+
+    metadata:
+      labels:
+        app: phaseb-api
+
+    spec:
+
+      containers:
+        - name: phaseb-api
+
+          image: phaseb-api
+
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8000
+
+          env:
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openai-secret
+                  key: OPENAI_API_KEY

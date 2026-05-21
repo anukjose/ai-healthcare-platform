@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: healthcare-frontend
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: healthcare-frontend
+
+  template:
+
+    metadata:
+      labels:
+        app: healthcare-frontend
+
+    spec:
+
+      containers:
+        - name: healthcare-frontend
+
+          image: healthcare-frontend
+
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 5173

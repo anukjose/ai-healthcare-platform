@@ -7,9 +7,9 @@ from openai import OpenAI
 load_dotenv()
 
 
-# -----------------------------------
+# ---------------------------------------------------
 # OPENAI CLIENT
-# -----------------------------------
+# ---------------------------------------------------
 
 api_key = os.getenv("OPENAI_API_KEY")
 
@@ -19,38 +19,77 @@ if not api_key:
 client = OpenAI(api_key=api_key)
 
 
-# -----------------------------------
-# DB CONNECTION
-# -----------------------------------
+# ---------------------------------------------------
+# KUBERNETES DATABASE CONNECTION
+# ---------------------------------------------------
+# Kubernetes services communicate internally
+# using Service names.
+#
+# postgres-service
+# is the Kubernetes Service hostname.
+# ---------------------------------------------------
+
+DB_CONFIG = {
+    "dbname": "healthcare_demo",
+    "user": "postgres",
+    "password": "postgres",
+    "host": "postgres-service",
+    "port": "5432"
+}
+
+
+# ---------------------------------------------------
+# GET DATABASE CONNECTION
+# ---------------------------------------------------
+
 def get_connection():
 
-    conn = psycopg2.connect(
-        dbname="healthcare_demo",
-        user="postgres",
-        password="postgres",
-        host="postgres-db",
-        port="5432"
-    )
+    conn = psycopg2.connect(**DB_CONFIG)
 
     return conn
 
-    ''' change to above for docker 
-    def get_connection():
 
-    conn = psycopg2.connect(
-        dbname="healthcare_demo",
-        user="anusmacbook",
-        host="localhost",
-        port="5432"
-    )
+# ---------------------------------------------------
+# PREVIOUS DOCKER COMPOSE CONFIG
+# ---------------------------------------------------
+'''
+Docker Compose networking used:
 
-    return conn
+host="postgres-db"
+
+because services communicated through
+Docker Compose internal network.
+
+Example:
+
+conn = psycopg2.connect(
+    dbname="healthcare_demo",
+    user="postgres",
+    password="postgres",
+    host="postgres-db",
+    port="5432"
+)
 '''
 
 
-# -----------------------------------
+# ---------------------------------------------------
+# PREVIOUS LOCAL LAPTOP CONFIG
+# ---------------------------------------------------
+'''
+Local Mac PostgreSQL connection:
+
+conn = psycopg2.connect(
+    dbname="healthcare_demo",
+    user="anusmacbook",
+    host="localhost",
+    port="5432"
+)
+'''
+
+
+# ---------------------------------------------------
 # GENERATE QUESTION EMBEDDING
-# -----------------------------------
+# ---------------------------------------------------
 
 def generate_question_embedding(question):
 
@@ -64,9 +103,9 @@ def generate_question_embedding(question):
     return embedding
 
 
-# -----------------------------------
+# ---------------------------------------------------
 # VECTOR SEARCH
-# -----------------------------------
+# ---------------------------------------------------
 
 def semantic_search(patient_id, question, limit=3):
 
@@ -101,6 +140,7 @@ def semantic_search(patient_id, question, limit=3):
     rows = cur.fetchall()
 
     cur.close()
+
     conn.close()
 
     results = []
@@ -115,9 +155,9 @@ def semantic_search(patient_id, question, limit=3):
     return results
 
 
-# -----------------------------------
+# ---------------------------------------------------
 # TEST
-# -----------------------------------
+# ---------------------------------------------------
 
 if __name__ == "__main__":
 
@@ -133,5 +173,7 @@ if __name__ == "__main__":
     for r in results:
 
         print("Distance:", r["distance"])
+
         print(r["content"])
+
         print("\n-------------------\n")
